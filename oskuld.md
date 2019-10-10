@@ -1,8 +1,4 @@
-##
-
-\bigslide{
-Hej, jag är Oskuld
-}
+# Hej, jag är Oskuld
 
 ## Intro
 

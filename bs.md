@@ -1,8 +1,4 @@
-##
-
-\bigslide{
-Evaluation
-}
+# Evaluation
 
 ## Values
 
