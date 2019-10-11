@@ -91,10 +91,12 @@ We denote this as `(S, E, C, D)`
 
 ## Closure
 
-explain
+The value returned by a λ-expression
 
-<!-- Can't really return a function, need to return a data object that we can
-put on the stack -->
+Save the environment the AE `X` was evaluated in, together with the body of the
+lambda expression
+
+Makes sure all variables in the body are still bound
 
 denote this closure by `<(E, bv X), [body X]>`
 
@@ -206,4 +208,7 @@ E '+' = f where f [x, y] = f + y
 ## Takeaways
 
 * Structure definitions
+    - Nicer than LISP list accessors
 * Mechanical evaluation
+    - Solves dereferencing of variables by introducing closures
+    - Later versions used as target for FP compilers
