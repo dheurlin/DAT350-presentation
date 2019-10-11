@@ -64,14 +64,18 @@ recursive val E X =
 
 **Now**: formula to advance one step through computation
 
-## Closure
+## Transform
 
-explain
+Transition rule that will gradually transform our state towards the final
+evaluation `val E X`
 
-<!-- Can't really return a function, need to return a data object that we can
-put on the stack -->
+    Transform : State → State
+    Transform (S, E, C, D) = (S', E', C' D')
 
-denote this closure by `<(E, bv X), [body X]>`
+In the end, will have `val E X` on top of the stack
+
+**Key idea:** Go through each item in `C`, evaluate it, put result on stack.
+
 
 ## State
 
@@ -85,21 +89,14 @@ denote this closure by `<(E, bv X), [body X]>`
 
 We denote this as `(S, E, C, D)`
 
-## Transform
+## Closure
 
-Transition rule that will gradually transform our state towards the final
-evaluation `val E X`
+explain
 
-    Transform : State → State
-    Transform (S, E, C, D) = (S', E', C' D')
+<!-- Can't really return a function, need to return a data object that we can
+put on the stack -->
 
-In the end, will have `val E X` on top of the stack
-
-**Key idea:** Go through each item in `C`, evaluate it, put result on stack.
-
-### Two cases:
-* C is null
-* C is not null
+denote this closure by `<(E, bv X), [body X]>`
 
 ## C is not null
 
@@ -108,7 +105,7 @@ Inspect `head C`:
 
 * **Identifier X** : put `lookup X E` on stack
 * **λ-expression X**: put the closure `<(E, bv X), [body X]>` on stack
-* **Combination X**: replace `C` by `[rand X, rator X, ap] ++ tail C`
+* **Combination X**: replace `C` by `[operand X, operator X, ap] ++ tail C`
 
 Advance to next item by replacing `C` with `tail C` unless otherwise specified
 
@@ -117,7 +114,10 @@ Advance to next item by replacing `C` with `tail C` unless otherwise specified
 `ap` is a marker that tells us to apply the *head* of the stack (`head S`) to
 the *second* element of the stack (`2nd S`)
 
-### Not a closure
+if `head S` is...
+
+### Not a closure:
+
 pop top two elements from stack, apply 1st to 2nd, push result
 
 ### Closure `<(E', x), [body]>`:
@@ -154,7 +154,56 @@ Transform(S,E,C,D) =
                   ([], extend E' (x, 2nd S), C, (drop 2 S, E, tail C, D))
                else → # not closure
                    ((head S) $ (2nd S) : drop 2 S, E,  tail C, D)
-    else → (S, E, [rand X, rator X, ap] ++ C, D)
+    else → (S, E, [operand X, operator X, ap] ++ C, D)
     where X = head C
 ```
 
+# Example
+
+## Example
+
+Consider the expression `(λx. y + x) 5`
+
+As an AE explicitly:
+
+```
+combinator
+  operator :
+    λexp
+     bv   : identifier 'x',
+     body :
+       combination
+        operator : {identifier '+'},
+        operand : [identifier 'y', identifier 'x']
+  operand : identifier '5'
+```
+
+## Example (2) - Environment
+
+Environment for `(λx. y + x) 5`
+
+```
+E '5' = 5
+E 'y' = 10
+E '+' = f where f [x, y] = f + y
+```
+
+## Example (3) - Stepwise evaluation
+
+>* `([], E, [(λx. '+' [y x]) 5], [])`
+>* `([], E, ['5', λx. '+' [y x], ap], [])     `     (combination)
+>* `([5], E, [λx. '+' [y x], ap], [])         `     (lookup '5' in env)
+>* `([<(E, 'x'), ['+' [y x]]>, 5], E, [ap], [])`    (closure)
+>* `([], E{x→5}, ['+' [y x]], ([], E, [], []))`     (extend environment, save old state)
+>* `([], E{x→5}, [[y x], '+', ap]), ([], E, [], []))` (combination)
+>* `([[10 5]], E{x→5}, ['+', ap], ([], E, [], []))`  (lookup x, y in env)
+>* `([+, [10 5]], E{x→5}, [ap], ([], E, [], []))`  (lookup + in env)
+>* `([15], E{x→5}, [], ([], E, [], []))`  (ap applies function)
+>* `([15], E, [], [])` (empty control, restore old state)
+
+# Takeaways
+
+## Takeaways
+
+* Structure definitions
+* Mechanical evaluation
