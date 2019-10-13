@@ -89,12 +89,12 @@ adding result of closure to stack
 
 ```
 Transform(S,E,C,D) =
-  null C → (head S : S', E', C, D')
+  isNull C → (head S : S', E', C, D')
     where S',E',C,D' = D
   else →
-    identifier X → ((lookup X E):S, E, tail C, D)
-    λexp X → [<(E, bv X), [body X]> : S, E, tail C, D]
-    X = ap → (head S == <(E', x), [body]>) → # closure
+    isIdentifier X → ((lookup X E):S, E, tail C, D)
+    isλexp X → [<(E, bv X), [body X]> : S, E, tail C, D]
+    X == ap → (head S == <(E', x), [body]>) → # closure
                   ([], extend E' (x, 2nd S), [body], (drop 2 S, E, tail C, D))
                else → # not closure
                    ((head S) $ (2nd S) : drop 2 S, E,  tail C, D)
