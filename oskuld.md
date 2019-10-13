@@ -3,6 +3,7 @@
 * Rules for evaluation
 * Mechanical evaluation of expressions
 
+
 # The language
 
 ## Applicative expressions (example)
