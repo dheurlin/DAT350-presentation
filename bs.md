@@ -95,7 +95,7 @@ Transform(S,E,C,D) =
     identifier X → ((lookup X E):S, E, tail C, D)
     λexp X → [<(E, bv X), [body X]> : S, E, tail C, D]
     X = ap → (head S == <(E', x), [body]>) → # closure
-                  ([], extend E' (x, 2nd S), C, (drop 2 S, E, tail C, D))
+                  ([], extend E' (x, 2nd S), [body], (drop 2 S, E, tail C, D))
                else → # not closure
                    ((head S) $ (2nd S) : drop 2 S, E,  tail C, D)
     else → (S, E, [operand X, operator X, ap] ++ C, D)
@@ -150,7 +150,8 @@ E '+' = f where f [x, y] = f + y
 ## Takeaways
 
 * Structure definitions
-    - Nicer than LISP list accessors
+    - more convenient than LISP list accessors
+    - Abstracts away ordering of members
 * Mechanical evaluation
     - Solves dereferencing of variables by introducing closures
     - Later versions used as target for FP compilers
