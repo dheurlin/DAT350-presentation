@@ -69,7 +69,7 @@ pop top two elements from stack, apply 1st to 2nd, push result
 Need to evaluate `body` in environment where `x` = `2nd S`
 
 * replace `S`  with `[]`
-* replace `E` with `extend E (x, 2nd S)`
+* replace `E` with `extend E' (x, 2nd S)`
 * replace `C` with `[body]`
 * replace `D` with `(drop 2 S, E, tail C, D)` (we return to this state after we
   leave the closure)
@@ -138,11 +138,11 @@ E '+' = f where f [x, y] = f + y
 >* `([], E, ['5', λx. '+' [y x], ap], [])     `     (combination)
 >* `([5], E, [λx. '+' [y x], ap], [])         `     (lookup '5' in env)
 >* `([<(E, 'x'), ['+' [y x]]>, 5], E, [ap], [])`    (closure)
->* `([], E{x→5}, ['+' [y x]], ([], E, [], []))`     (extend environment, save old state)
->* `([], E{x→5}, [[y x], '+', ap]), ([], E, [], []))` (combination)
->* `([[10 5]], E{x→5}, ['+', ap], ([], E, [], []))`  (lookup x, y in env)
->* `([+, [10 5]], E{x→5}, [ap], ([], E, [], []))`  (lookup + in env)
->* `([15], E{x→5}, [], ([], E, [], []))`  (ap applies function)
+>* `([], E'{x→5}, ['+' [y x]], ([], E, [], []))`     (extend environment, save old state)
+>* `([], E'{x→5}, [[y x], '+', ap]), ([], E, [], []))` (combination)
+>* `([[10 5]], E'{x→5}, ['+', ap], ([], E, [], []))`  (lookup x, y in env)
+>* `([+, [10 5]], E'{x→5}, [ap], ([], E, [], []))`  (lookup + in env)
+>* `([15], E'{x→5}, [], ([], E, [], []))`  (ap applies function)
 >* `([15], E, [], [])` (empty control, restore old state)
 
 # Takeaways
