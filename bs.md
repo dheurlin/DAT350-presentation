@@ -134,16 +134,21 @@ E '+' = f where f [x, y] = f + y
 
 ## Example (3) - Stepwise evaluation
 
->* `([], E, [(λx. '+' [y x]) 5], [])`
->* `([], E, ['5', λx. '+' [y x], ap], [])     `     (combination)
->* `([5], E, [λx. '+' [y x], ap], [])         `     (lookup '5' in env)
->* `([<(E, 'x'), ['+' [y x]]>, 5], E, [ap], [])`    (closure)
->* `([], E'{x→5}, ['+' [y x]], ([], E, [], []))`     (extend environment, save old state)
->* `([], E'{x→5}, [[y x], '+', ap]), ([], E, [], []))` (combination)
->* `([[10 5]], E'{x→5}, ['+', ap], ([], E, [], []))`  (lookup x, y in env)
->* `([+, [10 5]], E'{x→5}, [ap], ([], E, [], []))`  (lookup + in env)
->* `([15], E'{x→5}, [], ([], E, [], []))`  (ap applies function)
->* `([15], E, [], [])` (empty control, restore old state)
+\begin{table}[]
+\begin{tabular}{llll|l}
+Stack  & Env & Control & Dump & Comment \\ \hline
+\text{[]}                           &  E &  [(λx. '+' [y x]) 5] &  [] & \\
+\text{[]}                           &  E &  ['5', λx. '+' [y x], ap] &  [] &         (combination) \\
+\text{[5]}                          &  E &  [λx. '+' [y x], ap] &  []     &         (lookup '5' in env)\\
+\text{[<(E, 'x'), ['+' [y x]]>, 5]} &  E &  [ap] &  [] &   (closure)\\
+\text{[]}                           &  E'$_{x→5}$ &  ['+' [y x]] &  ([], E, [], [])   &  (extend env, save old state)\\
+\text{[]}                           &  E'$_{x→5}$ &  [[y x], '+' ,  ap] &  ([], E, [], []) & (combination)\\
+\text{[[10 5]]}                     &  E'$_{x→5}$ &  ['+', ap] &  ([], E, [], [])  & (lookup x, y in env)\\
+\text{[+ ,  [10 5]]}                &  E'$_{x→5}$ &  [ap] &  ([], E, [], [])  & (lookup + in env)\\
+\text{[15]}                         &  E'$_{x→5}$ &  [] &  ([], E, [], [])  & (ap applies function)\\
+\text{[15]}                         &  E &  [] &  [] & (empty control,  restore old state)
+\end{tabular}
+\end{table}
 
 # Takeaways
 
