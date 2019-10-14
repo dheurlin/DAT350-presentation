@@ -160,3 +160,5 @@ Stack  & Env & Control & Dump & Comment \\ \hline
 * Mechanical evaluation
     - Solves dereferencing of variables by introducing closures
     - Later versions used as target for FP compilers
+
+# The end
