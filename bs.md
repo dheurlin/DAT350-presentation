@@ -94,8 +94,8 @@ Transform(S,E,C,D) =
   else →
     isIdentifier X → ((lookup X E):S, E, tail C, D)
     isλexp X → [<(E, bv X), [body X]> : S, E, tail C, D]
-    X == ap → (head S == <(E', x), [body]>) → # closure
-                  ([], extend E' (x, 2nd S), [body], (drop 2 S, E, tail C, D))
+    X == ap → (head S == <(E', x), [cBody]>) → # closure
+                  ([], extend E' (x, 2nd S), [cBody], (drop 2 S, E, tail C, D))
                else → # not closure
                    ((head S) $ (2nd S) : drop 2 S, E,  tail C, D)
     else → (S, E, [operand X, operator X, ap] ++ C, D)
